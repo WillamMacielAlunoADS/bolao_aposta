@@ -1,0 +1,29 @@
+{% extends 'bolao/base.html' %}
+
+{% block content %}
+<div>
+    <h2>{{ jogo.equipe1.nome }} vs {{ jogo.equipe2.nome }}</h2>
+    <form action="{% url 'save_aposta' %}" method="POST">{% csrf_token %}
+        <label for="">Usuário</label>
+        <select name="usuario">
+            {% for user in usuario %}
+                <option value="{{ user.pk }}">{{ user }}</option>
+            {% endfor %}
+        </select>
+        <label for="">Placar 1</label>
+        <input type="number" name="placar1">
+
+        <label for="">Placar 2</label>
+        <input type="number" name="placar2">
+        
+        <select name="jogo">
+            <option value="{{ jogo }}">{{ jogo.equipe1 }} vs {{ jogo.equipe2 }}</option>
+        </select>
+
+        <button type="submit" class="btn btn-primary btn-lg">Adicionar</button>
+        
+    </form>
+
+</div>
+
+{% endblock %}

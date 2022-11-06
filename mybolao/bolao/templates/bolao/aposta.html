@@ -1,0 +1,53 @@
+{% extends 'bolao/base.html' %}
+
+{% block content %}
+{% if user.is_authenticated %}
+    {% for part in partida %}
+    <!--<h1><a href="{% url 'aposta_edit' pk=part.pk %}">{{ part.equipe1.nome }} vs {{ part.equipe2.nome }}</a></h1>-->
+    <form action="{% url 'save_aposta' %}" method="POST">{% csrf_token %}
+        <label for="">Usuário</label>
+        <select name="usuario">
+            <option value="{{ usuario.pk }}">{{ usuario }}</option>
+        </select>
+        <h1>{{ part.equipe1.nome }}</h1>
+        <input type="number" name="placar1" id="input">
+
+        <h1>{{ part.equipe2.nome }}</h1>
+        <input type="number" name="placar2" id="input">
+        
+        <!--<select name="jogo">
+            <option value="{{ jogo }}">{{ jogo.equipe1 }} vs {{ jogo.equipe2 }}</option>
+        </select>--><br>
+
+        {% if part.concluido == True %}
+            <button type="submit" class="btn btn-primary btn-lg">Apostar</button>
+            <p>Aberto</p>
+        {% else %}
+            <button type="submit" id="botao" class="btn btn-primary btn-lg">Apostar</button>
+            <p>Fechado</p>
+        {% endif %}
+    </form>
+        
+    {% endfor %}
+{% endif %}
+<script>
+    //desabilita o botão no início
+document.getElementById("botao").disabled = true;
+
+//cria um event listener que escuta mudanças no input
+document.getElementById("input").addEventListener("input", function(event){
+    
+  //busca conteúdo do input
+    var conteudo = document.getElementById("input").value;
+  
+    //valida conteudo do input 
+    if (conteudo !== null && conteudo !== '') {
+      //habilita o botão
+      document.getElementById("botao").disabled = false;
+    } else {
+      //desabilita o botão se o conteúdo do input ficar em branco
+      document.getElementById("botao").disabled = true;
+    }
+});
+</script>
+{% endblock %}
